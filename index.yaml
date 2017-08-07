@@ -1,0 +1,20 @@
+modules
+  introduction - need
+  Login - done
+  Running a Docker image - done
+  Running PostGIS - need - same data as the class
+    Load the YAML from the stateful set
+    Then Load the data
+  Running GeoServer - need - same layers as in class
+    Load the YAML
+    Connect to Postgresql
+    Publish some layers
+  Putting a Front-End on It - need (use the one from the class)
+    Use an HTML S2I to build the front end from a git repo
+
+
+Next steps
+1. Build a cluster Using openshifter
+2. Do step PostGIS as I write the Doc
+3. Then step GeoServer
+4. Then Front-End
