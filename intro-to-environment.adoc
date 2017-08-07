@@ -1,0 +1,53 @@
+== Introduction to the OpenShift Environment
+
+Before we get started, we have already installed the OpenShift client tools on
+the VM for today's class.
+
+If not you can get them here:
+
+https://github.com/openshift/origin/releases/tag/v1.5.1
+
+Get the client file, unpackage, and put the _oc_ binary somewhere on your filesystem so it is in your path.
+
+We have also spun up a cluster "in the cloud" for you to work on today. You will be interacting as developers, not system administrators.
+
+=== The command line
+And with that we begin the journey. Our first step will be to login to the OpenShift cluster
+both from the command line (cli) and the web console (console). Open a terminal
+and type in:
+
+[source, bash]
+----
+> oc login {{CONSOLE_ADDRESS}}
+
+# on windows or if you get a cert. error do the following
+
+> oc login {{CONSOLE_ADDRESS}} --insecure-skip-tls-verify=true
+----
+
+You should be prompted for a username and password. Your username is the email address you used to sign up for the class and
+password is "letmein".
+
+After logging in you should see the following message:
+
+[source, bash]
+----
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+----
+
+=== Web Console
+
+Now in your browser go to {{CONSOLE_ADDRESS}}. You will get a warning about the
+certificate and this is to be expected since we are using self-signed
+certificates throughout the installation - so we will need to work around
+this. Once you accept the certs, you should see the login screen. Again use the same username and
+password from above. When done you should see something that looks like this:
+
+image::common/1_login.png[]
+
+And with that we are ready to get down to business. Let's start by just using
+a plain Docker container image from Docker hub!

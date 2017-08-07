@@ -1,0 +1,99 @@
+== Adding a Database
+
+Now it's time to get to the part of the workshop you have all been waiting for
+- getting PostGIS up and running!
+
+=== Project cleanup
+
+We are no longer going to need the NGINX container, so, please clean up your
+project from all we have done so far.
+
+[source, bash]
+----
+$ oc delete all --all
+----
+
+=== Generating the Database Pieces
+
+Spinning up our master and replicas is as easy as loading up some JSON directly from GitHub.
+
+[source, bash]
+----
+ $ oc new-app -p CCP_IMAGE_TAG=centos7-9.5-1.2.7 -f https://raw.githubusercontent.com/CrunchyData/crunchy-containers/master/examples/openshift/workshop/master.json
+ $ oc new-app -p CCP_IMAGE_TAG=centos7-9.5-1.2.7 -f https://raw.githubusercontent.com/CrunchyData/crunchy-containers/master/examples/openshift/workshop/replicas.json
+----
+
+That's it - thanks to the work by Jeff McCormick and OpenShift, you now have a master-replica PostGIS
+database setup. You can see it in the web overview for the project now.
+
+=== Loading the Database
+
+Let's go ahead and load up the database in the master with some DDL.
+
+Let's go ahead and shell into the _pg_ container running in the _master_ pod. Once we do that we can load the data directly from Github using cURL and the psql command.  The simplest way to do this is at the command line:
+
+[source, bash]
+----
+#shell into the 'master' pod into the 'pg' container
+$ oc rsh -c pg master
+
+
+#now load the data
+$ curl https://raw.githubusercontent.com/thesteve0/v3simple-spatial/master/ddl/parkcoord.sql |psql -U postgres -f -  userdb
+
+#now we can load the command line tool to make sure the data is inserted
+$ psql -U postgres userdb
+
+userdb=# select count(*) from parkpoints;
+ count
+--
+   547
+(1 row)
+
+userdb=# \q
+----
+
+You have now loaded your database with a bunch of points for national parks in
+the US and Canada. The really amazing part comes next. Go ahead and go to the
+overview for the project. Go ahead and click on the circle for the _replica_
+which will bring you to the details page for the pod. Go ahead and click on the terminal tab:
+
+image::common/3_terminal.png[]
+
+In that terminal go ahead and type the following commands:
+
+[source, bash]
+----
+$ psql -U postgres userdb
+
+userdb=# select count(*) from parkpoints;
+ count
+--
+   547
+(1 row)
+
+userdb=# \q
+
+----
+
+Do you REALIZE what just happened. We entered data into the Master DB and it
+was automatically replicated over to the slave DB and did 0 work to make sure
+that would happen.
+
+=== Time for More Replication Magic
+
+Let's take this to even another level. In the web console, go back to the
+overview again and then click on the little up arrow next to the replica pods:
+
+image::common/3_scale.png[]
+
+The number inside the circle will increment to 2 and then the blue circle will
+fill in the rest of the circle. You now have 2 replicas running. If you click
+on the circle again you will see the list of the two pods. If you click on the
+new pod and then do the commands above you will see that it has already been
+replicated to the new replica.
+
+In the next section we will spin up an application to use the master and the
+replicas.
+
+<<<

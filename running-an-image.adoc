@@ -1,0 +1,134 @@
+== Running a Docker Container Image
+
+Let's start by just running an NGINX server in OpenShift. By way of doing this
+we will also introduce you to many of the major pieces in an OpenShift project.
+
+We are going to move back and forth between the command line and the web UI so
+please have them both ready to go and logged in as the user.
+
+=== Create a Project
+
+In order to get going we need to create a _project_ to hold all of the pieces
+of our application(s). A _project_ is a materialized _namespace_ in Kubernetes
+that provides permissions and access control between different users' resources.
+
+The first thing we need to do as a user is create the _project_. Because project names have to be unique in a cluster, please pick a project name that is unique to you. We recommend the first part of your email address or your Kerberos username.
+
+[source, bash]
+----
+$ oc new-project <kerberos username>
+Now using project <kerberos username> on server "{{CONSOLE_ADDRESS}}".
+...
+----
+
+We created a _project_ named {{PROJECT_NAME}} and all subsequent commands will be executed against this _project_.
+
+There is a special _project_ that admins have access to in the cluster named
+"openshift". Any templates (explained later) or other objects placed in this
+project are available to all users of the cluster with read permissions.
+
+To see all the projects that you have permissions to see go ahead and:
+
+[source, bash]
+----
+$ oc get projects
+----
+
+=== Bringing in Docker Container Image from DockerHub
+
+Typically you will not bring in images directly from DockerHub because of the
+numerous flaws and vulnerabilities in DockerHub images. One big problem for
+many images on DockerHub is that they run as _root_ user when it is not even
+required. By default, an OpenShift cluster will not let you run images as
+_root_.
+
+We wanted to use the NGINX image put out by the
+https://hub.docker.com/r/centos/nginx-16-centos7/[CentOS group], but it requires
+the root privilege which is not allowed on our cluster, so we built a custom
+https://hub.docker.com/r/mjelen/nginx-summit/[image] just for this class.
+Bringing this into our OpenShift environment is as simple as
+
+[source, bash]
+----
+$ oc new-app docker.io/mjelen/nginx-summit
+
+--> Found Docker image c04a8bc (6 minutes old) from docker.io for "docker.io/mjelen/nginx-summit"
+
+    * An image stream will be created as "nginx-summit:latest" that will track this image
+    * This image will be deployed in deployment config "nginx-summit"
+    * Port 8080/tcp will be load balanced by service "nginx-summit"
+      * Other containers can access this service through the hostname "nginx-summit"
+    * WARNING: Image "docker.io/mjelen/nginx-summit" runs as the 'root' user which may not be permitted by your cluster administrator
+
+--> Creating resources ...
+    imagestream "nginx-summit" created
+    deploymentconfig "nginx-summit" created
+    service "nginx-summit" created
+--> Success
+    Run 'oc status' to view your app.
+----
+
+The command `oc new-app` actually does a lot of things for you. The idea behind
+new-app is to "do the right thing" when given a non-OpenShift artifact, we like
+to call it `oc translate`. So in this case we are telling OpenShift, "here is a
+Docker image, do your best to make all the pieces needed to make this run as a
+user would expect in OpenShift.
+
+If you go back to the Web UI and look in the webpages project you should see
+something like this (may take a while depending on the time it takes to
+download the Docker image):
+
+image::common/6_one_docker_image.png[]
+
+Now is a good time to reflect back on the architecture diagram we explained
+earlier and think about the objects created above. Let's start from the pod and work our way up to _Services_ and _Deployment Configurations_.
+
+=== Making a Route to our Service
+
+It's all well and fine that we have this pod running and fronted by a service
+to do load balancing and proxying, but how do we actually expose this to the
+outside world? This is where the OpenShift Route can be used to expose our
+service with a URL.
+
+In the Web UI, there is a link in the top right of NGINX SUMMIT titled
+"Create Route". Go ahead and click it and accept all the defaults.
+
+When you get back to the overview screen you will now have a URL up in the top
+of the box, go ahead and click (but be ready for sadness).
+
+image::common/6_one_docker_with_route.png[]
+
+The resulting page gives you a 403 error message because there is no html
+content in the mapped volume. This Docker container specified a mapped volume
+to hold its HTML content and we never populated it with files. For this
+exercise we will go in manually to the image and create some content.
+
+=== Opening a Terminal Into the Pod
+
+In the web UI click on the circle that says 1 pod, then click on the only pod
+in the list. This will bring you to the detailed description page for the pod.
+On that page please click on the Terminal tab.
+
+image::common/6_open_terminal.png[]
+
+What you have in front of you is a shell inside the running container. To create a HTML page that will be served up by NGINX just do
+the following command (you can use tab completion to fill in the elements on
+the path):
+
+[source, bash]
+----
+echo "hello world" > html/index.html
+----
+
+Now if you go back and reload the URL you will see "hello world" in your
+browser. But since Docker containers are immutable and the path we mounted for
+storage was a host path, this page will go away if we deploy a new image or the
+ image is destroyed.
+
+You may have noticed the _overview_ page that there was a warning about
+"No health checks defined". In the next section we will discuss what these
+warnings mean and how to fix it.
+
+Before you go on, please let the instructor know you are done with this section.
+Once enough people are finished we will stop and have a discussion, but feel free
+to keep moving forward.

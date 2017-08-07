@@ -1,0 +1,31 @@
+config:
+  vars:
+    - name: PROJECT_NAME
+      desc: Name of the user project
+      value: <your username>
+    - name: CONSOLE_ADDRESS
+      desc: HTTP address of the OpenShift console
+      value: https://console.class.molw.io:8443
+    - name: APPS_ADDRESS
+      desc: HTTP address suffix of apps dployed on OpenShift
+      value: apps.class.molw.io
+
+modules:
+  intro-to-os:
+    name: Brief Introduction to OpenShift
+  intro-to-environment:
+    name: Logging in to the Class Environment
+  running-an-image:
+    name: Running a Docker Container Image
+  health-checks:
+    name: Creating Health Checks on Containers
+  adding-database:
+    name: Adding a Database
+  addcode-application:
+    name: Adding Code to Your Application
+  blue-green:
+    name: Advanced Deployments
+  templates:
+    name: Templates and OpenShift/Kubernetes Declarative Syntax
+  otherthings:
+    name: Various Other Notes and Topics
