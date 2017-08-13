@@ -1,0 +1,17 @@
+In order to provision a master replica of PostGIS we are basically going
+to do dome oc commands. Do these in order on your machine from a command prompt.
+Mare sure to do these in the same directory as the JSON files (which should
+be the current directory)
+
+1.
+# create the service account used in the containers
+oc create -f set-sa.json
+
+2.
+#Now grant that serviceAccount the proper permissions
+oc policy add-role-to-group view system:serviceaccounts
+oc policy add-role-to-group edit system:serviceaccounts
+
+3.
+#Now load the database
+oc create -f database.json

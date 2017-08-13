@@ -17,15 +17,11 @@ modules:
     name: Logging in to the Class Environment
   running-an-image:
     name: Running a Docker Container Image
-  health-checks:
-    name: Creating Health Checks on Containers
   adding-database:
     name: Adding a Database
-  addcode-application:
-    name: Adding Code to Your Application
-  blue-green:
-    name: Advanced Deployments
-  templates:
-    name: Templates and OpenShift/Kubernetes Declarative Syntax
+  adding-geoserver:
+    name: Adding GeoServer to your Application
+  simple-app:
+    name: Fronting This with a Simple Application
   otherthings:
     name: Various Other Notes and Topics
