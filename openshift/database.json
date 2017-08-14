@@ -2,12 +2,12 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
-      "name": "GeoServer",
+      "name": "postgis",
       "creationTimestamp": null,
       "annotations": {
-          "description": "GeoServer Template",
+          "description": "Replicated postgis Template",
           "iconClass": "icon-database",
-          "tags": "geoserver, spatial server"
+          "tags": "postgresql, replicas, postgis"
       }
     },
     "objects": [
