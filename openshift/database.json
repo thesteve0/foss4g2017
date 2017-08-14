@@ -119,7 +119,7 @@
                         "name": "pgset",
                         "image": "crunchydata/crunchy-postgres-gis:centos7-9.6-1.5",
                         "ports": [{
-                            "containerPort": 5432,
+                            "containerPort": 5432
                         }],
                         "name": "postgres",
                         "env": [{

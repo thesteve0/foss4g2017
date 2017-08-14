@@ -14,7 +14,12 @@ modules
 
 
 Next steps
-1. Build a cluster Using openshifter
+go through all the steps and put in commands/screenshots as I do it
+Find the shapefile I used to create a layer for molw
+Export them as postgis files - need to project first
+
+
+
 2. Do step PostGIS as I write the Doc
 3. Then step GeoServer
 4. Then Front-End

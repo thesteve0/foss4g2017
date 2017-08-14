@@ -12,19 +12,22 @@ In order to get going we need to create a _project_ to hold all of the pieces
 of our application(s). A _project_ is a materialized _namespace_ in Kubernetes
 that provides permissions and access control between different users' resources.
 
-The first thing we need to do as a user is create the _project_. Because project names have to be unique in a cluster, please pick a project name that is unique to you. We recommend the first part of your email address or your Kerberos username.
+There should already be a project with your userid. If it is not there please follow the
+instructions to create one.
+The first thing we need to do as a user is create the _project_. Because project names have to be unique in a cluster,
+please pick a project name that is unique to you.
 
 [source, bash]
 ----
-$ oc new-project <kerberos username>
-Now using project <kerberos username> on server "{{CONSOLE_ADDRESS}}".
+$ oc new-project <userid>
+Now using project <userid> on server "{{CONSOLE_ADDRESS}}".
 ...
 ----
 
 We created a _project_ named {{PROJECT_NAME}} and all subsequent commands will be executed against this _project_.
 
 There is a special _project_ that admins have access to in the cluster named
-"openshift". Any templates (explained later) or other objects placed in this
+"openshift". Any templates or other objects placed in this
 project are available to all users of the cluster with read permissions.
 
 To see all the projects that you have permissions to see go ahead and:
@@ -132,3 +135,5 @@ warnings mean and how to fix it.
 Before you go on, please let the instructor know you are done with this section.
 Once enough people are finished we will stop and have a discussion, but feel free
 to keep moving forward.
+
+<<<<
