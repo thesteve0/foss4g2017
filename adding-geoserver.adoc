@@ -1,0 +1,8 @@
+== Adding GeoServer
+
+Now that we have the database all set, let's go ahead and add our geospatial server
+into our project. *DO NOT* delete anything from the project.
+
+For those of you who don't know much about GeoServer, you can read http://geoserver.org/[more here].
+Today we are only going to the very minimal install and usage of GeoServer, I highly recommend
+you attend more training to see all the power that GeoServer can offer you in your work.

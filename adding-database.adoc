@@ -18,34 +18,47 @@ $ oc delete all --all
 Spinning up our master and replicas is as easy as loading up some JSON directly from GitHub. First we
 create some Service Accounts to act on our behalf to carry out cluster tasks with PostGIS.
 
-TODO HERE
 [source, bash]
 ----
+$ oc create -f https://raw.githubusercontent.com/thesteve0/foss4g2017/master/openshift/set-sa.json
+serviceaccount "pgset-sa" created
 
+$ oc policy add-role-to-group view system:serviceaccounts
+role "view" added: "system:serviceaccounts"
+$ oc policy add-role-to-group edit system:serviceaccounts
+role "edit" added: "system:serviceaccounts"
 ----
 
 Then we go ahead and create databases along with the corresponding services.
 
 [source, bash]
 ----
+$ oc new-app -f https://raw.githubusercontent.com/thesteve0/foss4g2017/master/openshift/database.json
 
 ----
 
 That's it - thanks to the work by Jeff McCormick at Crunchy Data Solutions and OpenShift, you now have a master-replica PostGIS
-database setup. You can see it in the web overview for the project now.
+database setup. It may take a while for the images to pull and show up but you can see it in the web overview for the project now.
 
-This database is using StatefulSets in Kubernetes/OpenShift. This is a deployment that has extra logic that allows for specialized startup, container order, or data requirements.
+There is a bug in the interface where is shows the replica service spinning up another pod. Please ignore this, it is
+fixed in the new version (3.6).
+
+image::common/3_post_run.png[]
+
+
+This database is using https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/[StatefulSets] in Kubernetes/OpenShift.
+This is a deployment that has extra logic that allows for specialized startup, container order, or data requirements.
 
 === Loading the Database
 
 Let's go ahead and load up the database in the master with some DDL.
 
-Let's go ahead and shell into the _pg_ container running in the _master_ pod. Once we do that we can load the data directly from Github using cURL and the psql command.  The simplest way to do this is at the command line:
+Let's go ahead and shell into the _pgset-0_ pod. Once we do that we can load the data directly from Github using cURL and the psql command.  The simplest way to do this is at the command line:
 
 [source, bash]
 ----
 #shell into the 'master' pod into the 'pg' container
-$ oc rsh -c pg master
+$ oc rsh pgset-0
 
 
 #now load the data
