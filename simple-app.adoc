@@ -1,0 +1,51 @@
+== Building a Web Front-end to our Service
+
+Now that we have this nice shiny spatial service how about we incorporate this into
+a tidy little JavaScript frontend using Leaflet.
+
+This section is going to lightly touch on how to do code builds with OpenShift. Because of the
+immutable nature of container images, build patterns have to change. OpenShift has the means
+to handle this while making it transparent to the developer.
+
+This topic could take at least an hour by itself, so I am not going to discuss it too much
+here and will cover it mostly in class. This way I can tailor the content based on time
+available. For now you need to just trust me and do the commands I put below.
+
+=== HTML code for reading from GeoServer
+
+There is a Leaflet plugin for handling WFS and WMS data sources, which are datatypes we can use with GeoServer.
+The code for our application can be found in https://github.com/thesteve0/foss4gsimpleweb[GitHub].
+
+I am going to walk you through this in class because by now I am assuming most of your heads are full.
+
+The basic phases are:
+A. Make the necessary code changes
+
+1. Fork https://github.com/thesteve0/foss4gsimpleweb in GitHub into your own GitHub Space
+2. Change the URL on line 32 of index.html, replacing it with:
+    http://geoserver-<YourProjectName>.apps.class-test.molw.io/gwc/service/tms/1.0.0/<Your GeoServer NameSpace>%3Aparkpoints@EPSG%3A900913@png/{z}/{x}/{y}.png
+3. Save and Commit in Github
+
+B. "Build" and Deploy this code On OpenShift
+
+1. Click Add to Project on the top of the OpenShift console
+2. Select Uncategorized from the panes/buttons
+3. Choose select for HTTPD-2.4
+4. Give a name of "web" and the GitHub repo should be your fork of the repo created above/
+5. Click Submit
+6. Go to the left navigation on the overview page, choose Applications -> Routes
+7. Click on the web route
+8. Click on the Action Button on the top left and select "Edit"
+9. On the edit page, change the service from tcp/80 to tcp/8080
+10. Click Save
+
+Whew! Now, when the Pod for the Web Service turns blue you can click on the link and get a map
+with all our points displayed on it.
+
+I will go over all these steps in class and talk us through it. You have now built a fully
+scalable, cloud and container based infrastructure with replicated PostGIS, scalable GeoServer, and
+clean little front end. I hope you are proud of yourself!
+
+The next page is really just concepts I didn't cover in the lab that you might want to read more about if you
+work with OpenShift or Kubernetes in the Future. Again, we just scratched the surface today.
+Go learn more and be powerful!

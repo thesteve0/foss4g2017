@@ -5,4 +5,91 @@ into our project. *DO NOT* delete anything from the project.
 
 For those of you who don't know much about GeoServer, you can read http://geoserver.org/[more here].
 Today we are only going to the very minimal install and usage of GeoServer, I highly recommend
-you attend more training to see all the power that GeoServer can offer you in your work.
+you attend more training to see all the power that GeoServer can offer you in your work (and it's a ton of fun!).
+
+=== Deploying GeoServer
+
+Just like with the DB pieces we are going to pass in some JSON to have Kubernetes/OpenShift spin up a container to
+start up GeoServer, along with some Persistent Volumes for storing the data directory.
+
+We don't need to enable a service account here because there is no "clustering" between our geoserver
+instances.
+
+[source, bash]
+----
+
+$ oc new-app -f https://raw.githubusercontent.com/thesteve0/geoserver-fedora/master/openshift/geoserver.json
+
+----
+
+Geoserver will take a LONG time to come up, as in more than 5 minutes, so please be patient. You will probably need to refresh the overview page
+Several times to see if it really comes up.
+
+Once the pod circle fills in blue, go ahead and click the _create route_ link on the top right like we did with NGINX.
+Go ahead and accepts the defaults for the route. When finished go ahead and click on your brand new shiny URL and you
+should be greeted with this:
+
+image::common/geoserver_login.png[]
+
+The username and password are admin:geoserver, had your lazy instructor had planned better he could have made these variables
+things you could set when loading the JSON file. I will explain in class.
+
+=== Connecting to PostGIS
+
+There are currently no data sources set up for GeoServer, for those of you who are familiar with GeoServer think about why this might be.
+Let's go ahead and connect to our PostGIS we set up before.
+
+First step is to create a Workspace, then a store, then a layer.
+
+
+image::common/geoserver_nextsteps.png[]
+
+==== Adding Workspace & DataStore & Layer
+Go ahead and click on the *+* next to the Workshop and red number 1.
+
+For the name you can pick anything you want, though I would suggest "steveisgreat". For the namespace URI
+you can put any URI you want it won't matter for today's exercise, I used http://thisis.a.org. Also go ahead and check "Default Workspace".
+
+You should also check the boxes on the right side for WMTS, WFS, and WMS. When you have done this be sure to click "Save".
+
+Then click over on the left vertical menu on Stores.
+
+image::common/geoserver_adddatastore.png[]
+
+Click on the "Add new store" with the green *+* symbol. On the next screen pick PostGIS - NOT PostGIS (JNDI).
+
+On the next screen is where we fill in all the vital information.
+
+Please make sure you call the datasource name "postgis-reader", we are going to connect this to the replica service so it should
+only be used for reading from the database. You can say that in the description if you want.
+
+Leave the driver type as postgis and the port as 5432 BUT we need to change the host for the name for the replica service, which is _pg_replica_. The
+database is userdb, the username is postgres, and the password is password. Your screen should end up looking like this:
+
+image::common/geoserver_dbscreen.png[]
+
+Once it is filled in scroll down and hit save. This action should bring you to the *New Layer* screen, go ahead
+and click on the _publish_ link to the left of parkpoints.
+
+On this screen you set up all the things necessary to publish the layer. Most of the sensible
+defaults are already set up for you EXCEPT we need to define the bounding box. Scroll down the screen to the Bounding box
+section. Then click on the compute from data link and the compute from native bounds link.
+
+image::common/geoserver_boundingbox.png[]
+
+Once you have done that you can scroll to the bottom and save. You have now published your first GeoServer layer.
+
+=== Looking at Your Layer
+
+Now on the left hand menu you should see an icon and link for "Layer Preview". Click that and you should see your layer listed. Go ahead and
+click on the OpenLayers link and you should be greeted with:
+
+image::common/geoserver_layerpreview.png[]
+
+Congrats you have just published and viewed your first layer. If you click on GML link you can see all the points and their attributes.
+
+In class I will show you how we can hook up to the master service, access it through QGIS, and then see the changes in the reading service!
+
+Let's go on to adding a simple web frontend.
+
+<<<<
