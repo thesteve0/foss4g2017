@@ -40,7 +40,7 @@ $ oc new-app -f https://raw.githubusercontent.com/thesteve0/foss4g2017/master/op
 That's it - thanks to the work by Jeff McCormick at Crunchy Data Solutions and OpenShift, you now have a master-replica PostGIS
 database setup. It may take a while for the images to pull and show up but you can see it in the web overview for the project now.
 
-There is a bug in the interface where is shows the replica service spinning up another pod. Please ignore this, it is
+There is a bug in the interface where it shows the replica service spinning up another pod. Please ignore this, it is
 fixed in the new version (3.6).
 
 image::common/3_post_run.png[]

@@ -63,13 +63,13 @@ On the next screen is where we fill in all the vital information.
 Please make sure you call the datasource name "postgis-reader", we are going to connect this to the replica service so it should
 only be used for reading from the database. You can say that in the description if you want.
 
-Leave the driver type as postgis and the port as 5432 BUT we need to change the host for the name for the replica service, which is _pg_replica_. The
+Leave the driver type as postgis and the port as 5432 BUT we need to change the host for the name for the replica service, which is _pgset-replica_. The
 database is userdb, the username is postgres, and the password is password. Your screen should end up looking like this:
 
 image::common/geoserver_dbscreen.png[]
 
 Once it is filled in scroll down and hit save. This action should bring you to the *New Layer* screen, go ahead
-and click on the _publish_ link to the left of parkpoints.
+and click on the _publish_ link to the right of parkpoints.
 
 On this screen you set up all the things necessary to publish the layer. Most of the sensible
 defaults are already set up for you EXCEPT we need to define the bounding box. Scroll down the screen to the Bounding box

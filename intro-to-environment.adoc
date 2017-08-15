@@ -25,10 +25,9 @@ and type in:
 > oc login {{CONSOLE_ADDRESS}} --insecure-skip-tls-verify=true
 ----
 
-You should be prompted for a username and password. Your username is the email address you used to sign up for the class and
-password is "letmein".
+You should be prompted for a username and password. Your username and password were assigned in class.
 
-After logging in you should see the following message:
+After logging in you should see the following message (though you may have a project):
 
 [source, bash]
 ----
